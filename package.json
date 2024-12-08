@@ -1,6 +1,6 @@
 {
     "name": "@mcphub/gateway",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "MCPHub Gateway for Claude Desktop",
     "type": "module",
     "bin": {

@@ -1,6 +1,13 @@
-# MCPHub Gateway
+# MCP Server Gateway
 
-A gateway service that connects Claude Desktop to MCPHub servers, enabling access to a wide range of MCP (Model Context Protocol) servers.
+A gateway service that bridges the stdio-based Model Context Protocol (MCP) implementation in Claude Desktop with HTTP/SSE-based MCP servers. This solves the protocol compatibility gap since Claude Desktop currently only supports stdio-based MCP servers. See the discussion [here](https://github.com/orgs/modelcontextprotocol/discussions/16).
+
+## Why This Gateway?
+
+Claude Desktop App currently only supports stdio protocol for MCP servers, while many MCP servers use HTTP with Server-Sent Events (SSE) transport. This gateway acts as a protocol translator, allowing Claude Desktop to communicate with any HTTP/SSE MCP server by:
+1. Accepting stdio input from Claude Desktop
+2. Converting and forwarding requests to HTTP/SSE MCP servers
+3. Converting SSE responses back to stdio format for Claude Desktop
 
 ## Installation
 
@@ -49,7 +56,7 @@ Add this configuration (using the path you found in step 1):
 ```json
 {
   "mcpServers": {
-    "mcphub": {
+    "server-name": {
       "command": "node",
       "args": ["/opt/homebrew/lib/node_modules/@mcphub/gateway/dist/src/mcphub-gateway.js"]
     }
@@ -59,11 +66,20 @@ Add this configuration (using the path you found in step 1):
 
 Note: Replace the path in `args` with your actual path from step 1.
 
-### 3. Start Claude Desktop
+### 3. Configure MCP Server Connection
 
-Start or restart Claude Desktop
+The gateway uses an environment variable to specify which MCP server to connect to:
 
-The gateway will automatically connect to the MCPHub server at `https://server.mcphub.ai/api/mcp`.
+```bash
+# Set the MCP server URL (optional)
+export MCP_SERVER_URL=https://your-mcp-server.com/api/mcp
+```
+
+By default, the gateway connects to the MCP Hub server at `https://server.mcphub.ai/api/mcp`, which provides access to various pre-configured MCP services.
+
+### 4. Start Claude Desktop
+
+Start or restart Claude Desktop to apply the changes.
 
 ## Troubleshooting
 
@@ -92,9 +108,6 @@ The gateway will automatically connect to the MCPHub server at `https://server.m
      brew link node
      ```
    - If you get permission errors, you might need to use `sudo` for the installation
-
-4. Check if the MCPHub server is accessible:
-   - Try opening `https://server.mcphub.ai/api/mcp/health` in your browser
 
 ## License
 
