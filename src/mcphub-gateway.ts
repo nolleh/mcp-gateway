@@ -3,7 +3,7 @@
 import EventSource from "eventsource";
 
 // Configuration
-const MCP_SERVER_URL = process.env.MCPHUB_SERVER_URL || "https://server.mcphub.ai/api/mcp";
+const MCP_SERVER_URL = process.env.MCP_SERVER_URL || "https://server.mcphub.ai/api/mcp";
 
 const baseUrl = MCP_SERVER_URL;
 const backendUrlSse = `${baseUrl}/sse`;
